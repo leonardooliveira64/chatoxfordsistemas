@@ -1190,7 +1190,7 @@ const handleChartbot = async (
           body += options;
         }
   
-        aditionalOptions += "*[ 0 ]* - *Voltar*\n";
+        aditionalOptions += "*[ 0 ]* - *Voltar1*\n";
         aditionalOptions += "*[ # ]* - *Menu inicial*";
   
         body += aditionalOptions;
