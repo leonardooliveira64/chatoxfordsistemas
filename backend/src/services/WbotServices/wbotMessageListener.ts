@@ -1203,7 +1203,7 @@ const handleChartbot = async (
           }
         } else {
 
-          body += `*[ 0 ]* - *Voltar*\n`;
+          body += `*[ 0 ]* - *Voltar3*\n`;
           body += `*[ # ]* - *Menu inicial*`;
         }
       }
