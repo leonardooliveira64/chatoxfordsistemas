@@ -1190,7 +1190,7 @@ const handleChartbot = async (
           body += options;
         }
   
-        aditionalOptions += "*[ 0 ]* - *Voltar1*\n";
+        aditionalOptions += "*[ 0 ]* - *Voltar*\n";
         aditionalOptions += "*[ # ]* - *Menu inicial*";
   
         body += aditionalOptions;
@@ -1203,8 +1203,8 @@ const handleChartbot = async (
           }
         } else {
 
-          body += `*[ 0 ]* - *Voltar3*\n`;
-          body += `*[ # ]* - *Menu inicial*`;
+          //body += `*[ 0 ]* - *Voltar*\n`;
+          //body += `*[ # ]* - *Menu inicial*`;
         }
       }
   
