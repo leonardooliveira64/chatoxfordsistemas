@@ -1,4 +1,4 @@
-import moment from "moment";
+﻿import moment from "moment";
 import * as Sentry from "@sentry/node";
 import CheckContactOpenTickets from "../../helpers/CheckContactOpenTickets";
 import SetTicketMessagesAsRead from "../../helpers/SetTicketMessagesAsRead";
@@ -134,7 +134,7 @@ const UpdateTicketService = async ({
           ticket.isGroup ? "g.us" : "s.whatsapp.net"
         }`,
         {
-          text: "\u200eVocê foi transferido, em breve iremos iniciar seu atendimento."
+          text: "\u200eVocê foi transferido, em breve iremos iniciar seu atendimento, Aguarde!."
         }
       );
       await verifyMessage(queueChangedMessage, ticket, ticket.contact);
