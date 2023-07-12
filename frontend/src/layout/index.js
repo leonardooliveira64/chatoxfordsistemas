@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+﻿import React, { useState, useContext, useEffect } from "react";
 import clsx from "clsx";
 
 import {
@@ -167,7 +167,7 @@ const LoggedInLayout = ({ children }) => {
         setTimeout(() => {
           localStorage.clear();
           window.location.reload();
-        }, 1000);
+        }, 5000);
       }
     });
 
@@ -227,7 +227,7 @@ const LoggedInLayout = ({ children }) => {
         open={drawerOpen}
       >
         <div className={classes.toolbarIcon}>
-          <img src={logo} style={{ margin: "0 auto", height: "50px", width: "100%" }} alt="logo" />
+          <img src={logo} style={{ margin: "0 auto", height: "80px", width: "100%" }} alt="logo" />
           <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
             <ChevronLeftIcon />
           </IconButton>
@@ -270,7 +270,7 @@ const LoggedInLayout = ({ children }) => {
           >
             {greaterThenSm ? (
               <>
-                Olá <b>{user.name}</b>, Seja bem-vindo.
+                Olá <b>{user.name}</b>, Seja bem-vindo(a) a Plataforma de Multi-Atendimento da Oxford Sistemas.
               </>
             ) : (
               user.name
