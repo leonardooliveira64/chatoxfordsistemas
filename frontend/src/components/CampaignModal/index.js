@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+﻿import React, { useState, useEffect, useRef, useContext } from "react";
 
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
@@ -247,7 +247,7 @@ const CampaignModal = ({
         placeholder={i18n.t("campaigns.dialog.form.messagePlaceholder")}
         multiline={true}
         variant="outlined"
-        helperText="Utilize variáveis como {nome}, {numero}, {email} ou defina variáveis personalziadas."
+        helperText="Utilize variáveis como {nome}, {numero}, {email} ou defina variáveis personalizadas."
         disabled={!campaignEditable && campaign.status !== "CANCELADA"}
       />
     );
