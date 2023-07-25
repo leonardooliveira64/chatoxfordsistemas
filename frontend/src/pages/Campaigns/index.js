@@ -1,90 +1,34 @@
-/* eslint-disable no-unused-vars */
-
-import React, { useState, useEffect, useReducer } from "react";
-import { toast } from "react-toastify";
-
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
-import DescriptionIcon from "@material-ui/icons/Description";
-import TimerOffIcon from "@material-ui/icons/TimerOff";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
+import { toast } from "react-toastify";
 
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
 import Title from "../../components/Title";
-
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import api from "../../services/api";
+
 import { i18n } from "../../translate/i18n";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import CampaignModal from "../../components/CampaignModal";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import toastError from "../../errors/toastError";
-import { Grid } from "@material-ui/core";
-import { isArray } from "lodash";
-import { useDate } from "../../hooks/useDate";
-import { socketConnection } from "../../services/socket";
-
-const reducer = (state, action) => {
-  if (action.type === "LOAD_CAMPAIGNS") {
-    const campaigns = action.payload;
-    const newCampaigns = [];
-
-    if (isArray(campaigns)) {
-      campaigns.forEach((campaign) => {
-        const campaignIndex = state.findIndex((u) => u.id === campaign.id);
-        if (campaignIndex !== -1) {
-          state[campaignIndex] = campaign;
-        } else {
-          newCampaigns.push(campaign);
-        }
-      });
-    }
-
-    return [...state, ...newCampaigns];
-  }
-
-  if (action.type === "UPDATE_CAMPAIGNS") {
-    const campaign = action.payload;
-    const campaignIndex = state.findIndex((u) => u.id === campaign.id);
-
-    if (campaignIndex !== -1) {
-      state[campaignIndex] = campaign;
-      return [...state];
-    } else {
-      return [campaign, ...state];
-    }
-  }
-
-  if (action.type === "DELETE_CAMPAIGN") {
-    const campaignId = action.payload;
-
-    const campaignIndex = state.findIndex((u) => u.id === campaignId);
-    if (campaignIndex !== -1) {
-      state.splice(campaignIndex, 1);
-    }
-    return [...state];
-  }
-
-  if (action.type === "RESET") {
-    return [];
-  }
-};
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
@@ -93,331 +37,282 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll",
     ...theme.scrollbarStyles,
   },
+  textRight: {
+    textAlign: "right",
+  },
+  tabPanelsContainer: {
+    padding: theme.spacing(2),
+  },
 }));
 
-const Campaigns = () => {
+const initialSettings = {
+  messageInterval: 120,
+  longerIntervalAfter: 60,
+  greaterInterval: 180,
+  variables: [],
+};
+
+const CampaignsConfig = () => {
   const classes = useStyles();
 
-  const history = useHistory();
-
-  const [loading, setLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [selectedCampaign, setSelectedCampaign] = useState(null);
-  const [deletingCampaign, setDeletingCampaign] = useState(null);
-  const [campaignModalOpen, setCampaignModalOpen] = useState(false);
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [searchParam, setSearchParam] = useState("");
-  const [campaigns, dispatch] = useReducer(reducer, []);
-
-  const { datetimeToClient } = useDate();
+  const [settings, setSettings] = useState(initialSettings);
+  const [showVariablesForm, setShowVariablesForm] = useState(false);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const [variable, setVariable] = useState({ key: "", value: "" });
 
   useEffect(() => {
-    dispatch({ type: "RESET" });
-    setPageNumber(1);
-  }, [searchParam]);
-
-  useEffect(() => {
-    setLoading(true);
-    const delayDebounceFn = setTimeout(() => {
-      fetchCampaigns();
-    }, 500);
-    return () => clearTimeout(delayDebounceFn);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParam, pageNumber]);
-
-  useEffect(() => {
-    const companyId = localStorage.getItem("companyId");
-    const socket = socketConnection({ companyId });
-
-    socket.on(`company-${companyId}-campaign`, (data) => {
-      if (data.action === "update" || data.action === "create") {
-        dispatch({ type: "UPDATE_CAMPAIGNS", payload: data.record });
-      }
-      if (data.action === "delete") {
-        dispatch({ type: "DELETE_CAMPAIGN", payload: +data.id });
+    api.get("/campaign-settings").then(({ data }) => {
+      const settingsList = [];
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach((item) => {
+          settingsList.push([item.key, JSON.parse(item.value)]);
+        });
+        setSettings(Object.fromEntries(settingsList));
       }
     });
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
-  const fetchCampaigns = async () => {
-    try {
-      const { data } = await api.get("/campaigns/", {
-        params: { searchParam, pageNumber },
-      });
-      dispatch({ type: "LOAD_CAMPAIGNS", payload: data.records });
-      setHasMore(data.hasMore);
-      setLoading(false);
-    } catch (err) {
-      toastError(err);
+  const handleOnChangeVariable = (e) => {
+    if (e.target.value !== null) {
+      const changedProp = {};
+      changedProp[e.target.name] = e.target.value;
+      setVariable((prev) => ({ ...prev, ...changedProp }));
     }
   };
 
-  const handleOpenCampaignModal = () => {
-    setSelectedCampaign(null);
-    setCampaignModalOpen(true);
+  const handleOnChangeSettings = (e) => {
+    const changedProp = {};
+    changedProp[e.target.name] = e.target.value;
+    setSettings((prev) => ({ ...prev, ...changedProp }));
   };
 
-  const handleCloseCampaignModal = () => {
-    setSelectedCampaign(null);
-    setCampaignModalOpen(false);
+  const addVariable = () => {
+    setSettings((prev) => {
+      const variablesExists = settings.variables.filter(
+        (v) => v.key === variable.key
+      );
+      const variables = prev.variables;
+      if (variablesExists.length === 0) {
+        variables.push(Object.assign({}, variable));
+        setVariable({ key: "", value: "" });
+      }
+      return { ...prev, variables };
+    });
   };
 
-  const handleSearch = (event) => {
-    setSearchParam(event.target.value.toLowerCase());
+  const removeVariable = () => {
+    const newList = settings.variables.filter((v) => v.key !== selectedKey);
+    setSettings((prev) => ({ ...prev, variables: newList }));
+    setSelectedKey(null);
   };
 
-  const handleEditCampaign = (campaign) => {
-    setSelectedCampaign(campaign);
-    setCampaignModalOpen(true);
-  };
-
-  const handleDeleteCampaign = async (campaignId) => {
-    try {
-      await api.delete(`/campaigns/${campaignId}`);
-      toast.success(i18n.t("campaigns.toasts.deleted"));
-    } catch (err) {
-      toastError(err);
-    }
-    setDeletingCampaign(null);
-    setSearchParam("");
-    setPageNumber(1);
-  };
-
-  const loadMore = () => {
-    setPageNumber((prevState) => prevState + 1);
-  };
-
-  const handleScroll = (e) => {
-    if (!hasMore || loading) return;
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    if (scrollHeight - (scrollTop + 100) < clientHeight) {
-      loadMore();
-    }
-  };
-
-  const formatStatus = (val) => {
-    switch (val) {
-      case "INATIVA":
-        return "Inativa";
-      case "PROGRAMADA":
-        return "Programada";
-      case "EM_ANDAMENTO":
-        return "Em Andamento";
-      case "CANCELADA":
-        return "Cancelada";
-      case "FINALIZADA":
-        return "Finalizada";
-      default:
-        return val;
-    }
-  };
-
-  const cancelCampaign = async (campaign) => {
-    try {
-      await api.post(`/campaigns/${campaign.id}/cancel`);
-      toast.success(i18n.t("campaigns.toasts.cancel"));
-      setPageNumber(1);
-      fetchCampaigns();
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
-
-  const restartCampaign = async (campaign) => {
-    try {
-      await api.post(`/campaigns/${campaign.id}/restart`);
-      toast.success(i18n.t("campaigns.toasts.restart"));
-      setPageNumber(1);
-      fetchCampaigns();
-    } catch (err) {
-      toast.error(err.message);
-    }
+  const saveSettings = async () => {
+    await api.post("/campaign-settings", { settings });
+    toast.success("Configurações salvas");
   };
 
   return (
     <MainContainer>
       <ConfirmationModal
-        title={
-          deletingCampaign &&
-          `${i18n.t("campaigns.confirmationModal.deleteTitle")} ${
-            deletingCampaign.name
-          }?`
-        }
-        open={confirmModalOpen}
-        onClose={setConfirmModalOpen}
-        onConfirm={() => handleDeleteCampaign(deletingCampaign.id)}
+        title={i18n.t("campaigns.confirmationModal.deleteTitle")}
+        open={confirmationOpen}
+        onClose={() => setConfirmationOpen(false)}
+        onConfirm={removeVariable}
       >
         {i18n.t("campaigns.confirmationModal.deleteMessage")}
       </ConfirmationModal>
-      <CampaignModal
-        resetPagination={() => {
-          setPageNumber(1);
-          fetchCampaigns();
-        }}
-        open={campaignModalOpen}
-        onClose={handleCloseCampaignModal}
-        aria-labelledby="form-dialog-title"
-        campaignId={selectedCampaign && selectedCampaign.id}
-      />
       <MainHeader>
         <Grid style={{ width: "99.6%" }} container>
-          <Grid xs={12} sm={8} item>
-            <Title>{i18n.t("campaigns.title")}</Title>
-          </Grid>
-          <Grid xs={12} sm={4} item>
-            <Grid spacing={2} container>
-              <Grid xs={6} sm={6} item>
-                <TextField
-                  fullWidth
-                  placeholder={i18n.t("campaigns.searchPlaceholder")}
-                  type="search"
-                  value={searchParam}
-                  onChange={handleSearch}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon style={{ color: "gray" }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid xs={6} sm={6} item>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={handleOpenCampaignModal}
-                  color="primary"
-                >
-                  {i18n.t("campaigns.buttons.add")}
-                </Button>
-              </Grid>
-            </Grid>
+          <Grid xs={12} item>
+            <Title>{i18n.t("campaignsConfig.title")}</Title>
           </Grid>
         </Grid>
       </MainHeader>
-      <Paper
-        className={classes.mainPaper}
-        variant="outlined"
-        onScroll={handleScroll}
-      >
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.name")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.status")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.contactList")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.whatsapp")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.scheduledAt")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.completedAt")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.confirmation")}
-              </TableCell>
-              <TableCell align="center">
-                {i18n.t("campaigns.table.actions")}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <>
-              {campaigns.map((campaign) => (
-                <TableRow key={campaign.id}>
-                  <TableCell align="center">{campaign.name}</TableCell>
-                  <TableCell align="center">
-                    {formatStatus(campaign.status)}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.contactListId
-                      ? campaign.contactList.name
-                      : "Não definida"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.whatsappId
-                      ? campaign.whatsapp.name
-                      : "Não definido"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.scheduledAt
-                      ? datetimeToClient(campaign.scheduledAt)
-                      : "Sem agendamento"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.completedAt
-                      ? datetimeToClient(campaign.completedAt)
-                      : "Não concluída"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.confirmation ? "Habilitada" : "Desabilitada"}
-                  </TableCell>
-                  <TableCell align="center">
-                    {campaign.status === "EM_ANDAMENTO" && (
-                      <IconButton
-                        onClick={() => cancelCampaign(campaign)}
-                        title="Parar Campanha"
-                        size="small"
-                      >
-                        <PauseCircleOutlineIcon />
-                      </IconButton>
-                    )}
-                    {campaign.status === "CANCELADA" && (
-                      <IconButton
-                        onClick={() => restartCampaign(campaign)}
-                        title="Parar Campanha"
-                        size="small"
-                      >
-                        <PlayCircleOutlineIcon />
-                      </IconButton>
-                    )}
-                    <IconButton
-                      onClick={() =>
-                        history.push(`/campaign/${campaign.id}/report`)
-                      }
-                      size="small"
-                    >
-                      <DescriptionIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleEditCampaign(campaign)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        setConfirmModalOpen(true);
-                        setDeletingCampaign(campaign);
-                      }}
-                    >
-                      <DeleteOutlineIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {loading && <TableRowSkeleton columns={8} />}
-            </>
-          </TableBody>
-        </Table>
+      <Paper className={classes.mainPaper} variant="outlined">
+        <Box className={classes.tabPanelsContainer}>
+          <Grid spacing={2} container>
+            <Grid xs={12} item>
+              <Typography component={"h3"}>Intervalos</Typography>
+            </Grid>
+            <Grid xs={12} md={4} item>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                fullWidth
+              >
+                <InputLabel id="messageInterval-label">
+                  Intervalo Randômico de Disparo
+                </InputLabel>
+                <Select
+                  name="messageInterval"
+                  id="messageInterval"
+                  labelId="messageInterval-label"
+                  label="Intervalo Randômico de Disparo"
+                  value={settings.messageInterval}
+                  onChange={(e) => handleOnChangeSettings(e)}
+                >
+                  <MenuItem value={0}>Sem Intervalo</MenuItem>
+                  <MenuItem value={5}>5 segundos</MenuItem>
+                  <MenuItem value={10}>10 segundos</MenuItem>
+                  <MenuItem value={15}>15 segundos</MenuItem>
+                  <MenuItem value={20}>20 segundos</MenuItem>
+                  <MenuItem value={60}>60 segundos</MenuItem>
+		  <MenuItem value={120}>120 segundos</MenuItem>
+		  <MenuItem value={220}>220 segundos</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid xs={12} md={4} item>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                fullWidth
+              >
+                <InputLabel id="longerIntervalAfter-label">
+                  Intervalo Maior Após
+                </InputLabel>
+                <Select
+                  name="longerIntervalAfter"
+                  id="longerIntervalAfter"
+                  labelId="longerIntervalAfter-label"
+                  label="Intervalo Maior Após"
+                  value={settings.longerIntervalAfter}
+                  onChange={(e) => handleOnChangeSettings(e)}
+                >
+                  <MenuItem value={0}>Não definido</MenuItem>
+                  <MenuItem value={5}>5 mensagens</MenuItem>
+                  <MenuItem value={10}>10 mensagens</MenuItem>
+                  <MenuItem value={15}>15 mensagens</MenuItem>
+                  <MenuItem value={20}>20 mensagens</MenuItem>
+                  <MenuItem value={60}>60 segundos</MenuItem>
+		  <MenuItem value={120}>120 segundos</MenuItem>
+		  <MenuItem value={220}>220 segundos</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid xs={12} md={4} item>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                fullWidth
+              >
+                <InputLabel id="greaterInterval-label">
+                  Intervalo de Disparo Maior
+                </InputLabel>
+                <Select
+                  name="greaterInterval"
+                  id="greaterInterval"
+                  labelId="greaterInterval-label"
+                  label="Intervalo de Disparo Maior"
+                  value={settings.greaterInterval}
+                  onChange={(e) => handleOnChangeSettings(e)}
+                >
+                  <MenuItem value={0}>Sem Intervalo</MenuItem>
+                  <MenuItem value={20}>20 segundos</MenuItem>
+                  <MenuItem value={30}>30 segundos</MenuItem>
+                  <MenuItem value={40}>40 segundos</MenuItem>
+                  <MenuItem value={50}>50 segundos</MenuItem>
+                  <MenuItem value={60}>60 segundos</MenuItem>
+		  <MenuItem value={180}>180 segundos</MenuItem>
+		  <MenuItem value={380}>380 segundos</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid xs={12} className={classes.textRight} item>
+              <Button
+                onClick={() => setShowVariablesForm(!showVariablesForm)}
+                color="primary"
+                style={{ marginRight: 10 }}
+              >
+                Adicionar Variável
+              </Button>
+              <Button
+                onClick={saveSettings}
+                color="primary"
+                variant="contained"
+              >
+                Salvar Configurações
+              </Button>
+            </Grid>
+            {showVariablesForm && (
+              <>
+                <Grid xs={12} md={6} item>
+                  <TextField
+                    label="Atalho"
+                    variant="outlined"
+                    value={variable.key}
+                    name="key"
+                    onChange={handleOnChangeVariable}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid xs={12} md={6} item>
+                  <TextField
+                    label="Conteúdo"
+                    variant="outlined"
+                    value={variable.value}
+                    name="value"
+                    onChange={handleOnChangeVariable}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid xs={12} className={classes.textRight} item>
+                  <Button
+                    onClick={() => setShowVariablesForm(!showVariablesForm)}
+                    color="primary"
+                    style={{ marginRight: 10 }}
+                  >
+                    Fechar
+                  </Button>
+                  <Button
+                    onClick={addVariable}
+                    color="primary"
+                    variant="contained"
+                  >
+                    Adicionar
+                  </Button>
+                </Grid>
+              </>
+            )}
+            {settings.variables.length > 0 && (
+              <Grid xs={12} className={classes.textRight} item>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={{ width: "1%" }}></TableCell>
+                      <TableCell>Atalho</TableCell>
+                      <TableCell>Conteúdo</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {Array.isArray(settings.variables) &&
+                      settings.variables.map((v, k) => (
+                        <TableRow key={k}>
+                          <TableCell>
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                setSelectedKey(v.key);
+                                setConfirmationOpen(true);
+                              }}
+                            >
+                              <DeleteOutlineIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell>{"{" + v.key + "}"}</TableCell>
+                          <TableCell>{v.value}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
       </Paper>
     </MainContainer>
   );
 };
 
-export default Campaigns;
+export default CampaignsConfig;
