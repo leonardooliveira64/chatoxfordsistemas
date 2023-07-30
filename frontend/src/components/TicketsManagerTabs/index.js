@@ -16,6 +16,7 @@ import Switch from "@material-ui/core/Switch";
 
 import NewTicketModal from "../NewTicketModal";
 import TicketsList from "../TicketsListCustom";
+import TicketsListGroup from "../TicketsListCustomGroup";
 import TabPanel from "../TabPanel";
 
 import { i18n } from "../../translate/i18n";
@@ -247,6 +248,12 @@ const TicketsManagerTabs = () => {
             classes={{ root: classes.tab }}
           />
           <Tab
+            value={"group"}
+            icon={<MoveToInboxIcon />}
+            label={"Grupo"}
+            classes={{ root: classes.tab }}
+          />
+          <Tab
             value={"closed"}
             icon={<CheckBoxIcon />}
             label={i18n.t("tickets.tabs.closed.title")}
@@ -360,19 +367,86 @@ const TicketsManagerTabs = () => {
           />
         </Paper>
       </TabPanel>
+	  <TabPanel value={tab} name="group" className={classes.ticketsWrapper}>
+        <Tabs
+          value={tabOpen}
+          onChange={handleChangeTabOpen}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab
+            label={
+              <Badge
+                className={classes.badge}
+                badgeContent={openCount}
+                color="primary"
+              >
+                {i18n.t("ticketsList.assignedHeader")}
+              </Badge>
+            }
+            value={"open"}
+          />
+          <Tab
+            label={
+              <Badge
+                className={classes.badge}
+                badgeContent={pendingCount}
+                color="secondary"
+              >
+                {i18n.t("ticketsList.pendingHeader")}
+              </Badge>
+            }
+            value={"pending"}
+          />
+        </Tabs>
+        <Paper className={classes.ticketsWrapper}>
+          
+	<TicketsListGroup
+            status="open"
+            showAll={showAllTickets}
+            selectedQueueIds={selectedQueueIds}
+            updateCount={(val) => setOpenCount(val)}
+            style={applyPanelStyle("open")}
+          />
+          <TicketsListGroup
+            status="pending"
+            selectedQueueIds={selectedQueueIds}
+            updateCount={(val) => setPendingCount(val)}
+            style={applyPanelStyle("pending")}
+          />
+        </Paper>
+      </TabPanel>
       <TabPanel value={tab} name="closed" className={classes.ticketsWrapper}>
-        <TicketsList
+        Privado
+	<TicketsList
           status="closed"
           showAll={true}
           selectedQueueIds={selectedQueueIds}
         />
+	Grupos
+	<TicketsListGroup
+          status="closed"
+          showAll={true}
+          selectedQueueIds={selectedQueueIds}
+        />
+		
       </TabPanel>
       <TabPanel value={tab} name="search" className={classes.ticketsWrapper}>
         <TagsFilter onFiltered={handleSelectedTags} />
         {profile === "admin" && (
           <UsersFilter onFiltered={handleSelectedUsers} />
         )}
+	Privado
         <TicketsList
+          searchParam={searchParam}
+          showAll={true}
+          tags={selectedTags}
+          users={selectedUsers}
+          selectedQueueIds={selectedQueueIds}
+        />
+	Grupos
+        <TicketsListGroup
           searchParam={searchParam}
           showAll={true}
           tags={selectedTags}
