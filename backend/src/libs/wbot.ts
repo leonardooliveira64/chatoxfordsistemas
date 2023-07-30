@@ -98,7 +98,7 @@ export const initWASocket = async (whatsapp: Whatsapp): Promise<Session> => {
           auth: state as AuthenticationState,
           generateHighQualityLinkPreview: false,
           shouldIgnoreJid: jid => isJidBroadcast(jid),
-          browser: ["Chat", "Chrome", "10.15.7"],
+          browser: ["Chat - Multi-Atendimento OxfordSistemas", "Chrome", "10.15.7"],
           patchMessageBeforeSending: (message) => {
             const requiresPatch = !!(
                 message.buttonsMessage ||
