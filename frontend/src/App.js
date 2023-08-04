@@ -17,16 +17,16 @@ const App = () => {
         },
         '&::-webkit-scrollbar-thumb': {
           boxShadow: 'inset 0 0 6px rgba(170, 0, 126, 126)',
-          backgroundColor: '#2DDD7F',
+          backgroundColor: '#66b0e3',
         },
       },
       palette: {
-        primary: { main: "#2DDD7F" },
+        primary: { main: "#66b0e3" },
         third: { main: "#d17308" }
       },
 
       barraSuperior: {
-        primary: { main: "linear-gradient(to right, #2DDD7F, #2DDD7F , #2DDD7F)" },
+        primary: { main: "linear-gradient(to right, #66b0e3, #66b0e3 , #66b0e3)" },
         secondary: { main: "#ffffff" },
       },
 
@@ -35,11 +35,11 @@ const App = () => {
       },
 
       icons: {
-        primary: { main: "#2DDD7F" }
+        primary: { main: "#66b0e3" }
       },
       textColorMenu: {
         primary: { main: "#000000" },
-        secondary: { main: "#2DDD7F" }
+        secondary: { main: "#66b0e3" }
       
       },    },
     locale

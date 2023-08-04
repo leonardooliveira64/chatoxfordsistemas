@@ -27,6 +27,8 @@ import { Button } from "@material-ui/core";
 import { TagsFilter } from "../TagsFilter";
 import { UsersFilter } from "../UsersFilter";
 
+import api from "../../services/api";
+
 const useStyles = makeStyles(theme => ({
 	ticketsWrapper: {
 		position: "relative",
@@ -221,6 +223,12 @@ const TicketsManagerTabs = () => {
   const handleSelectedUsers = (selecteds) => {
     const users = selecteds.map((t) => t.id);
     setSelectedUsers(users);
+  };
+
+  const closeAll = async () => {
+    await api.post(`/ticketsClosed/`);
+    alert('Todos os tickets foram fechados');
+    window.location.reload();
   };
 
   return (

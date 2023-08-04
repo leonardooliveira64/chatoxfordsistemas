@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+﻿import React, { useState, useEffect, useReducer, useRef } from "react";
 
 import { isSameDay, parseISO, format } from "date-fns";
 import clsx from "clsx";
@@ -22,6 +22,7 @@ import {
 } from "@material-ui/icons";
 
 import MarkdownWrapper from "../MarkdownWrapper";
+import VcardPreview from "../VcardPreview";
 import ModalImageCors from "../ModalImageCors";
 import MessageOptionsMenu from "../MessageOptionsMenu";
 import whatsBackground from "../../assets/wa-background.png";
@@ -41,8 +42,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     minWidth: 300,
     minHeight: 200,
-  },
-
+  }, 
+   ticketNunber: {
+      color: "#808888",
+      padding: 8,
+    },
   messagesList: {
     backgroundImage: `url(${whatsBackground})`,
     display: "flex",
@@ -208,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
 
   timestamp: {
     fontSize: 11,
-	padding:7,
+    padding:7,
     position: "absolute",
     bottom: 0,
     right: 5,
@@ -430,6 +434,27 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
 
       return <LocationPreview image={imageLocation} link={linkLocation} description={descriptionLocation} />
     }
+	  else if (message.mediaType === "vcard") {
+		console.log("vcard")
+		console.log(message)
+		let array = message.body.split("\n");
+		let obj = [];
+		let contact = "";
+		for (let index = 0; index < array.length; index++) {
+			const v = array[index];
+			let values = v.split(":");
+			for (let ind = 0; ind < values.length; ind++) {
+				if (values[ind].indexOf("+") !== -1) {
+					obj.push({ number: values[ind] });
+				}
+				if (values[ind].indexOf("FN") !== -1) {
+					contact = values[ind + 1];
+				}
+			}
+		}
+		return <VcardPreview contact={contact} numbers={obj[0].number} />
+	} 
+///////////////////////
     /* else if (message.mediaType === "vcard") {
       let array = message.body.split("\n");
       let obj = [];
@@ -448,7 +473,9 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
       }
       return <VcardPreview contact={contact} numbers={obj[0].number} />
     } */
-    /*else if (message.mediaType === "multi_vcard") {
+////////////////////
+/*
+    else if (message.mediaType === "multi_vcard") {
       console.log("multi_vcard")
       console.log(message)
     	
@@ -464,7 +491,8 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
           </>
         )
       } else return (<></>)
-    }*/
+    }
+*/
     else if (message.mediaType === "image") {
       return <ModalImageCors imageUrl={message.mediaUrl} />;
     } else if (message.mediaType === "audio") {
@@ -567,18 +595,25 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
       if (messageTicket !== previousMessageTicket) {
         return (
           <center>
-            <div className={classes.ticketNunberClosed}>
+	<div key={`ticket-${message.id}`} className={classes.ticketNunber}>
+            #Ticket: {messageTicket}
+            <hr />
+          </div>
+
+           /* <div className={classes.ticketNunberClosed}>
               Conversa encerrada: {format(parseISO(messagesList[index - 1].createdAt), "dd/MM/yyyy HH:mm:ss")}
             </div>
-
-            <div className={classes.ticketNunberOpen}>
+*/
+           /* <div className={classes.ticketNunberOpen}>
               Conversa iniciada: {format(parseISO(message.createdAt), "dd/MM/yyyy HH:mm:ss")}
-            </div>
+            </div>*/
           </center>
         );
       }
     }
   };
+
+
 
   const renderMessageDivider = (message, index) => {
     if (index < messagesList.length && index > 0) {

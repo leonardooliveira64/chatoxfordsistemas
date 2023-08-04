@@ -37,8 +37,10 @@ const TicketInfo = ({ contact, ticket, onClick }) => {
 			titleTypographyProps={{ noWrap: true }}
 			subheaderTypographyProps={{ noWrap: true }}
 			avatar={<Avatar src={contact.profilePicUrl} alt="contact_image" />}
-			title={`${contactName} #${ticket.id}`}
+			title={`${contactName} - TicketID:${ticket.id} - ${contact.number} `} 
+			
 			subheader={ticket.user && `${userName}`}
+
 		/>
 	);
 };

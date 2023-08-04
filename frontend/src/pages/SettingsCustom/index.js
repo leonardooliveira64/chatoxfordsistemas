@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
 import Title from "../../components/Title";
@@ -24,7 +24,8 @@ import OnlyForSuperUser from "../../components/OnlyForSuperUser";
 const useStyles = makeStyles((theme) => ({
   root: {
     flex: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
+    /*backgroundColor: theme.palette.background.paper,*/
   },
   mainPaper: {
     ...theme.scrollbarStyles,

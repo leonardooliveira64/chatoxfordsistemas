@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+﻿import React, { useState, useEffect, useRef, useContext } from "react";
 
 import { useHistory, useParams } from "react-router-dom";
 import { parseISO, format, isSameDay } from "date-fns";
@@ -371,7 +371,7 @@ const TicketListItemCustom = ({ ticket }) => {
                 variant="body2"
                 color="textPrimary"
               >
-                {ticket.contact.name}
+                {ticket.contact.name} - {ticket.contact.number}
                 {profile === "admin" && (
                   <Tooltip title="Espiar Conversa">
                     <VisibilityIcon

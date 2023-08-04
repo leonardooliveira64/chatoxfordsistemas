@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -46,9 +46,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialSettings = {
-  messageInterval: 20,
-  longerIntervalAfter: 20,
-  greaterInterval: 60,
+  messageInterval: 120,
+  longerIntervalAfter: 60,
+  greaterInterval: 180,
   variables: [],
 };
 
@@ -157,7 +157,9 @@ const CampaignsConfig = () => {
                   <MenuItem value={10}>10 segundos</MenuItem>
                   <MenuItem value={15}>15 segundos</MenuItem>
                   <MenuItem value={20}>20 segundos</MenuItem>
+                  <MenuItem value={60}>60 segundos</MenuItem>
 		  <MenuItem value={120}>120 segundos</MenuItem>
+		  <MenuItem value={220}>220 segundos</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -183,7 +185,9 @@ const CampaignsConfig = () => {
                   <MenuItem value={10}>10 mensagens</MenuItem>
                   <MenuItem value={15}>15 mensagens</MenuItem>
                   <MenuItem value={20}>20 mensagens</MenuItem>
+                  <MenuItem value={60}>60 segundos</MenuItem>
 		  <MenuItem value={120}>120 segundos</MenuItem>
+		  <MenuItem value={220}>220 segundos</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -211,6 +215,8 @@ const CampaignsConfig = () => {
                   <MenuItem value={50}>50 segundos</MenuItem>
                   <MenuItem value={60}>60 segundos</MenuItem>
 		  <MenuItem value={180}>180 segundos</MenuItem>
+		  <MenuItem value={250}>250 segundos</MenuItem>
+		  <MenuItem value={380}>380 segundos</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

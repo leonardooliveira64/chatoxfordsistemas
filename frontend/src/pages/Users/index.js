@@ -81,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll",
     ...theme.scrollbarStyles,
   },
+  icon: {
+		color: theme.palette.primary.main
+	},
 }));
 
 const Users = () => {
@@ -257,14 +260,14 @@ const Users = () => {
                   <TableCell align="center">{user.email}</TableCell>
                   <TableCell align="center">{user.profile}</TableCell>
                   <TableCell align="center">
-                    <IconButton
+                    <IconButton className={classes.icon}
                       size="small"
                       onClick={() => handleEditUser(user)}
                     >
                       <EditIcon />
                     </IconButton>
 
-                    <IconButton
+                    <IconButton className={classes.icon}
                       size="small"
                       onClick={(e) => {
                         setConfirmModalOpen(true);

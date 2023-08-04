@@ -248,12 +248,12 @@ const reducer = (state, action) => {
 
   
     useEffect(() =>{
-	  const count = ticketsList.filter(ticket => !ticket.isGroup).length;
+	  const count = ticketsList.filter(ticket => ticket.isGroup).length;
 	  if(typeof updateCount === "function") {
 	    updateCount(count);
 	  }
     },[ticketsList, updateCount]);	  
- 
+
 
 	const loadMore = () => {
 		setPageNumber(prevState => prevState + 1);
@@ -291,7 +291,7 @@ const reducer = (state, action) => {
 					) : (
 						<>
 							{ticketsList
-			  .filter(ticket =>ticket.isGroup.toString() ==="false")
+			  .filter(ticket =>ticket.isGroup.toString() ==="true")
 			  .map((ticket) => (
                 <TicketListItem ticket={ticket} key={ticket.id} />
               ))}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+﻿import React, { useState, useEffect, useContext } from 'react';
 import { Button, TextField, DialogContent, DialogActions, Grid } from '@material-ui/core';
 import PropType from 'prop-types'
 import Dialog from '../Dialog';
@@ -18,7 +18,7 @@ const MessageSchema = Yup.object().shape({
 		.required("Required"),
     message: Yup.string()
         .min(3, "Too Short!")
-        .max(1000, "Too Long!")
+        .max(10000, "Too Long!")
         .required("Required")
 });
 
