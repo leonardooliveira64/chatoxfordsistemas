@@ -20,7 +20,7 @@ type IndexQuery = {
 type CompanyData = {
   name: string;
   id?: number;
-  phone?: string;
+  phone: string;
   email?: string;
   status?: boolean;
   planId?: number;

@@ -8,6 +8,7 @@ import AssociateWhatsappQueue from "./AssociateWhatsappQueue";
 
 interface WhatsappData {
   name?: string;
+  phone?: string;
   status?: string;
   session?: string;
   isDefault?: boolean;
@@ -43,6 +44,7 @@ const UpdateWhatsAppService = async ({
 
   const {
     name,
+    phone,
     status,
     isDefault,
     session,
@@ -83,6 +85,7 @@ const UpdateWhatsAppService = async ({
 
   await whatsapp.update({
     name,
+    phone,
     status,
     session,
     greetingMessage,

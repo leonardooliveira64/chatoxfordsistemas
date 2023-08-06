@@ -32,6 +32,7 @@ import AnnouncementsPopover from "../components/AnnouncementsPopover";
 import logo from "../assets/zapsimples.png";
 import { socketConnection } from "../services/socket";
 import ChatPopover from "../pages/Chat/ChatPopover";
+import { Can } from "../components/Can";
 
 const drawerWidth = 300;
 

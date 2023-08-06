@@ -6,7 +6,7 @@ import Setting from "../../models/Setting";
 
 interface CompanyData {
   name: string;
-  phone?: string;
+  phone: string;
   email?: string;
   password?: string;
   status?: boolean;
@@ -69,6 +69,7 @@ const CreateCompanyService = async (
 
   const user = await User.create({
     name: company.name,
+    phone: company.phone,
     email: company.email,
     password: companyData.password,
     profile: "admin",

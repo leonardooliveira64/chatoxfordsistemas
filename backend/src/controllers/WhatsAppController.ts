@@ -20,6 +20,7 @@ interface WhatsappData {
   status?: string;
   isDefault?: boolean;
   token?: string;
+  phone: string;
 }
 
 interface QueryParams {
@@ -37,6 +38,7 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 export const store = async (req: Request, res: Response): Promise<Response> => {
   const {
     name,
+    phone,
     status,
     isDefault,
     greetingMessage,
@@ -49,6 +51,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
   const { whatsapp, oldDefaultWhatsapp } = await CreateWhatsAppService({
     name,
+    phone,
     status,
     isDefault,
     greetingMessage,

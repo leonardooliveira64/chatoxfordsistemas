@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+﻿import * as Yup from "yup";
 
 import AppError from "../../errors/AppError";
 import Whatsapp from "../../models/Whatsapp";
@@ -8,6 +8,7 @@ import AssociateWhatsappQueue from "./AssociateWhatsappQueue";
 
 interface Request {
   name: string;
+  phone: string;
   companyId: number;
   queueIds?: number[];
   greetingMessage?: string;
@@ -27,6 +28,7 @@ interface Response {
 
 const CreateWhatsAppService = async ({
   name,
+  phone,
   status = "OPENING",
   queueIds = [],
   greetingMessage,
@@ -130,6 +132,7 @@ const CreateWhatsAppService = async ({
   const whatsapp = await Whatsapp.create(
     {
       name,
+      phone,
       status,
       greetingMessage,
       complationMessage,

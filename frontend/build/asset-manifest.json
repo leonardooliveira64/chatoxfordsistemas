@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.js": "/static/js/main.103dc6ca.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.2361b08a.js",
+    "static/css/2.fa426b8c.chunk.css": "/static/css/2.fa426b8c.chunk.css",
+    "static/js/2.f80b9df4.chunk.js": "/static/js/2.f80b9df4.chunk.js",
+    "static/js/3.4356e338.chunk.js": "/static/js/3.4356e338.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.82c34025dd95e470a7086bc8ad6df839.js": "/precache-manifest.82c34025dd95e470a7086bc8ad6df839.js",
+    "service-worker.js": "/service-worker.js",
+    "static/js/2.f80b9df4.chunk.js.LICENSE.txt": "/static/js/2.f80b9df4.chunk.js.LICENSE.txt",
+    "static/js/3.4356e338.chunk.js.LICENSE.txt": "/static/js/3.4356e338.chunk.js.LICENSE.txt",
+    "static/js/main.103dc6ca.chunk.js.LICENSE.txt": "/static/js/main.103dc6ca.chunk.js.LICENSE.txt",
+    "static/media/chat_notify.mp3": "/static/media/chat_notify.2529c259.mp3",
+    "static/media/planilha.xlsx": "/static/media/planilha.549edeba.xlsx",
+    "static/media/sound.mp3": "/static/media/sound.9fd5812c.mp3",
+    "static/media/wa-background.png": "/static/media/wa-background.2675a051.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2361b08a.js",
+    "static/css/2.fa426b8c.chunk.css",
+    "static/js/2.f80b9df4.chunk.js",
+    "static/js/main.103dc6ca.chunk.js"
+  ]
+}

@@ -1,4 +1,4 @@
-import { join } from "path";
+﻿import { join } from "path";
 import { promisify } from "util";
 import { writeFile } from "fs";
 import * as Sentry from "@sentry/node";
@@ -938,6 +938,7 @@ const verifyQueue = async (
     }
 
   } else {
+
     if (buttonActive.value === "list") {
       return botList();
     };
@@ -1203,8 +1204,12 @@ const handleChartbot = async (
           }
         } else {
 
-          //body += `*[ 0 ]* - *Voltar*\n`;
-          //body += `*[ # ]* - *Menu inicial*`;
+	
+	//aqui esta dando loop
+	//body += `*\u200eAguarde, você será atendido em instantes.*`;
+	//body += `\n\n${firstOption.message}`;
+          //body += `*[ 0 ]* - *Voltar2*\n`;
+          //body += `*[ # ]* - *Menu inicial2*`;
         }
       }
   

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+﻿import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import ListItem from "@material-ui/core/ListItem";
@@ -29,6 +29,18 @@ import ForumIcon from "@material-ui/icons/Forum";
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import PaymentIcon from "@material-ui/icons/Payment";
 
+import BallotIcon from '@material-ui/icons/Ballot';
+import GroupIcon from '@material-ui/icons/Group';
+import SendIcon from '@material-ui/icons/Send';
+import TextsmsIcon from '@material-ui/icons/Textsms';
+import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk';
+import BurstModeIcon from '@material-ui/icons/BurstMode';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import ChatIcon from '@material-ui/icons/Chat';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import SubjectIcon from '@material-ui/icons/Subject';
+import VerticalSplitIcon from '@material-ui/icons/VerticalSplit';
+
 import { i18n } from "../translate/i18n";
 import { WhatsAppsContext } from "../context/WhatsApp/WhatsAppsContext";
 import { AuthContext } from "../context/Auth/AuthContext";
@@ -37,9 +49,17 @@ import { socketConnection } from "../services/socket";
 import { isArray } from "lodash";
 import api from "../services/api";
 import toastError from "../errors/toastError";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+	icon: {
+		color: theme.palette.primary.main
+	},
+}));
 
 function ListItemLink(props) {
   const { icon, primary, to, className } = props;
+  const classes = useStyles();
 
   const renderLink = React.useMemo(
     () =>
@@ -52,7 +72,8 @@ function ListItemLink(props) {
   return (
     <li>
       <ListItem button component={renderLink} className={className}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        
+{icon ? <ListItemIcon className={classes.icon}>{icon}</ListItemIcon> : null}
         <ListItemText primary={primary} />
       </ListItem>
     </li>
@@ -329,11 +350,12 @@ const MainListItems = (props) => {
                       onClick={() => history.push("/campaigns-config")}
                       button
                     >
-                      <ListItemIcon>
+                    <ListItemIcon>
                         <SettingsOutlinedIcon />
                       </ListItemIcon>
                       <ListItemText primary="Configurações" />
                     </ListItem>
+
                   </List>
                 </Collapse>
               </>
@@ -344,7 +366,60 @@ const MainListItems = (props) => {
                 primary={i18n.t("mainDrawer.listItems.annoucements")}
                 icon={<AnnouncementIcon />}
               />
-            )}
+			   )}
+			 { /*
+		      <ListItemLink
+                to="/ZDGChatbot"
+                primary={"ZDGChatbot"}
+                icon={<ChatIcon />}
+              / >
+      <ListItemLink
+              to="/ZDGAgendamento"
+              primary={"ZDGAgendamento"}
+              icon={<ScheduleIcon />}
+      />
+      <ListItemLink
+              to="/ZDGHistorico"
+              primary={"ZDGHistorico"}
+              icon={<SubjectIcon />}
+      />
+      <ListItemLink
+              to="/ZDG"
+              primary={"ZDG"}
+              icon={<SendIcon />}
+      />
+      <ListItemLink
+              to="/ZDGMedia"
+              primary={"ZDGMedia"}
+              icon={<BurstModeIcon />}
+      />
+      <ListItemLink
+              to="/ZDGGroups"
+              primary={"ZDGGroups"}
+              icon={<GroupIcon />}
+      />
+      <ListItemLink
+              to="/InstaDirect"
+              primary={"Direct"}
+              icon={<InstagramIcon />}
+      />
+      <ListItemLink
+              to="/ZDGKanban"
+              primary={"ZDGKanban"}
+              icon={<VerticalSplitIcon />}
+      />
+      <ListItemLink
+              to="/SMS"
+              primary={"SMS"}
+              icon={<TextsmsIcon />}
+      />
+      <ListItemLink
+              to="/VoiceCall"
+              primary={"VoiceCall"}
+              icon={<PhoneInTalkIcon />}
+      />
+           
+			*/}
             <ListItemLink
               to="/connections"
               primary={i18n.t("mainDrawer.listItems.connections")}
@@ -379,7 +454,9 @@ const MainListItems = (props) => {
               primary={i18n.t("mainDrawer.listItems.settings")}
               icon={<SettingsOutlinedIcon />}
             />
-{/*             <ListItemLink
+      
+	
+{/*           <ListItemLink
               to="/subscription"
               primary="Assinatura"
               icon={<PaymentIcon />}
@@ -387,9 +464,13 @@ const MainListItems = (props) => {
             /> */}
           </>
         )}
+		
       />
+
     </div>
+
   );
+
 };
 
 export default MainListItems;

@@ -5,7 +5,7 @@ import Setting from "../../models/Setting";
 interface CompanyData {
   name: string;
   id?: number | string;
-  phone?: string;
+  phone: string;
   email?: string;
   status?: boolean;
   planId?: number;

@@ -1,4 +1,4 @@
-const messages = {
+﻿const messages = {
   pt: {
     translations: {
       signup: {
@@ -117,7 +117,7 @@ const messages = {
         success: "WhatsApp salvo com sucesso.",
       },
       qrCode: {
-        message: "Leia o QrCode para iniciar a sessão",
+        message: "Leia o QrCode com seu celular para iniciar a sessão",
       },
       contacts: {
         title: "Contatos",
@@ -662,7 +662,7 @@ const messages = {
           placeholder: "Insira aqui a informação que deseja registrar",
         },
         confirmationModal: {
-          title: "Deletar o ticket do contato",
+          title: "Deletar o ticket do contato ",
           message:
             "Atenção! Todas as mensagens relacionadas ao ticket serão perdidas.",
         },

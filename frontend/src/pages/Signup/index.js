@@ -70,6 +70,10 @@ const UserSchema = Yup.object().shape({
 		.required("Required"),
 	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!"),
 	email: Yup.string().email("Invalid email").required("Required"),
+        phone: Yup.string()
+		.min(2, "Too Short!")
+		.max(50, "Too Long!")
+		.required("Required"),
 });
 
 const SignUp = () => {
@@ -82,7 +86,7 @@ const SignUp = () => {
 		companyId = params.companyId
 	}
 
-	const initialState = { name: "", email: "", password: "", planId: "", };
+	const initialState = { name: "", email: "", password: "",phone: "", planId: "", };
 
 	const [user] = useState(initialState);
 	const dueDate = moment().add(5, "day").format();
@@ -151,7 +155,19 @@ const SignUp = () => {
 										label="Nome da Empresa"
 									/>
 								</Grid>
-
+<Grid item xs={12}>
+									<Field
+										as={TextField}
+										autoComplete="phone"
+										name="phone"
+										error={touched.phone && Boolean(errors.phone)}
+										helperText={touched.phone && errors.phone}
+										variant="outlined"
+										fullWidth
+										id="phone"
+										label="Telefone"
+									/>
+								</Grid>
 								<Grid item xs={12}>
 									<Field
 										as={TextField}
@@ -181,6 +197,7 @@ const SignUp = () => {
 										required
 									/>
 								</Grid>
+								
 								<Grid item xs={12}>
 									<InputLabel htmlFor="plan-selection">Plano</InputLabel>
 									<Field
@@ -225,7 +242,7 @@ const SignUp = () => {
 					)}
 				</Formik>
 			</div>
-			<Box mt={5}>{/* <Copyright /> */}</Box>
+			<Box mt={5}>Copyright 2023 - OxfordSistemas - Plataforma de Multi Atendimento Online</Box>
 		</Container>
 	);
 };

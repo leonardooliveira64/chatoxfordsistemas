@@ -56,12 +56,17 @@ const SessionSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  phone: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
 });
 
 const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
   const classes = useStyles();
   const initialState = {
     name: "",
+    phone:"",
     greetingMessage: "",
     complationMessage: "",
     outOfHoursMessage: "",
@@ -171,6 +176,19 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
                     </Grid>
                   </Grid>
                 </div>
+		<div>
+		<Field
+                        as={TextField}
+                        label={"Numero"}
+                        autoFocus
+                        name="phone"
+                        error={touched.phone && Boolean(errors.phone)}
+                        helperText={touched.phone && errors.phone}
+                        variant="outlined"
+                        margin="dense"
+                        className={classes.textField}
+                      />
+				 </div>
                 <div>
                   <Field
                     as={TextField}
