@@ -1,0 +1,10 @@
+FAZER BACKUP E RESTAURAÇÃO DO BANCO DE DADOS.
+
+VERIFICAR O BANCO
+sudo -u postgres psql
+
+ACESSAR A PASTA ONDE VAI FICAR O BACKUP
+cd /home/deploy/bkp
+
+COMANDO PARA GERAR O BACKUP
+sudo -u postgres pg_dump nomedobancodedados > banco.bkp
