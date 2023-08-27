@@ -8,3 +8,19 @@ cd /home/deploy/bkp
 
 COMANDO PARA GERAR O BACKUP
 sudo -u postgres pg_dump nomedobancodedados > banco.bkp
+
+CANCELAR OS PROCESSOS ABERTOS QUE ESTÃO USANDO O BANCO DE DADOS
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE -- don't kill my own connection!  
+pid <> pg_backend_pid() -- don't kill the connections to other databases AND datname = 'BANCODEDADOS';
+ SELECT *, pg_terminate_backend(pid)
+FROM pg_stat_activity 
+WHERE pid <> pg_backend_pid()
+AND datname = 'BANCODEDADOS';
+ 
+APAGAR O BANCO DE DADOS
+ drop database BANCODEDADOS;
+ OU
+ DROP DATABASE BANCODEDADOS WITH (FORCE);
+ 
+RESTAURAR O BANCO DE DADOS COM O COMANDO QUE FOI SALVO ANTERIORMENTE
+sudo -u postgres psql BANCODEDADOS < /home/deploy/bkp/bkpbanco.bkp
