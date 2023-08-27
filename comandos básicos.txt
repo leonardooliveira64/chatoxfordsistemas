@@ -24,3 +24,35 @@ APAGAR O BANCO DE DADOS
  
 RESTAURAR O BANCO DE DADOS COM O COMANDO QUE FOI SALVO ANTERIORMENTE
 sudo -u postgres psql BANCODEDADOS < /home/deploy/bkp/bkpbanco.bkp
+
+
+
+PM2
+PARA VERIFICAR LOG
+ACESSE: cd /home/deploy/APLICACAO/backend
+
+COMANDOS PM2: 
+PM2 LOG
+PM2 LIST
+PM2 RESTART 'NUMERO DA INSTANCIA'
+PM2 STOP
+PM2 START
+
+
+REINICIAR SERVER
+SUDO SHUTDOWN -R
+------------------
+FIX LIB WHATSAPP
+localize o caminho: /node_modules/whatsapp-web.js/src/Client.js
+
+substituir:
+const INTRO_IMG_SELECTOR = '[data-testid="intro-md-beta-logo-dark"], [data-testid="intro-md-beta-logo-light"], [data-asset-intro-image-light="true"], [data-asset-intro-image-dark="true"]';
+
+por:
+const INTRO_IMG_SELECTOR = "[data-icon='chat']";
+
+-----------------------
+
+ALTERAR PORTAS FRONTEND/BACKEND SEM PRECISAR REINSTALAR
+Alterando no backend .env, e no /etc/nginx a entrada do domínio. Em seguida reiniciar no pm2 e realizar nova certificação de domínio,
+altera apenas no sites-avaliable e roda o processo nginx. O sistema vai jogar no sites-enabled automaticamente 
