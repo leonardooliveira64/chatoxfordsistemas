@@ -36,6 +36,7 @@ import { AuthContext } from "../../context/Auth/AuthContext";
 import { Can } from "../../components/Can";
 import NewTicketModal from "../../components/NewTicketModal";
 import { socketConnection } from "../../services/socket";
+import {CSVLink} from "react-csv";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_CONTACTS") {
@@ -292,6 +293,10 @@ const Contacts = () => {
           >
             {i18n.t("contacts.buttons.add")}
           </Button>
+
+<CSVLink style={{ textDecoration:'none'}} separator=";" filename={'contatos.csv'} data={contacts.map((contact) => ({ name: contact.name, number: contact.number, email: contact.email }))}>
+<Button	variant="contained" color="primary"> EXPORTAR CONTATOS </Button></CSVLink>
+
         </MainHeaderButtonsWrapper>
       </MainHeader>
       <Paper
@@ -302,7 +307,9 @@ const Contacts = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
+			  <TableCell>{"ID"}</TableCell>
               <TableCell padding="checkbox" />
+			  
               <TableCell>{i18n.t("contacts.table.name")}</TableCell>
               <TableCell align="center">
                 {i18n.t("contacts.table.whatsapp")}
@@ -319,9 +326,11 @@ const Contacts = () => {
             <>
               {contacts.map((contact) => (
                 <TableRow key={contact.id}>
+				<TableCell>{contact.id}</TableCell>
                   <TableCell style={{ paddingRight: 0 }}>
                     {<Avatar src={contact.profilePicUrl} />}
                   </TableCell>
+				  
                   <TableCell>{contact.name}</TableCell>
                   <TableCell align="center">{contact.number}</TableCell>
                   <TableCell align="center">{contact.email}</TableCell>
