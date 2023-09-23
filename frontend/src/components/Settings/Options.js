@@ -30,17 +30,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     height: 240,
   },
-  tab: {
-    background: "#f2f5f3",
+tab: {
+    backgroundColor: theme.palette.options,  //DARK MODE PLW DESIGN//
     borderRadius: 4,
     width: "100%",
     "& .MuiTab-wrapper": {
-      color: "#128c7e"
+      color: theme.palette.fontecor,  //DARK MODE PLW DESIGN//
     },
     "& .MuiTabs-flexContainer": {
       justifyContent: "center"
     }
-
 
   },
   paper: {
@@ -109,7 +108,14 @@ export default function Options(props) {
   const [loadingAsaasType, setLoadingAsaasType] = useState(false);
 
   const { update } = useSettings();
-
+  
+  
+  const [SendGreetingAccepted, setSendGreetingAccepted] = useState("disabled");
+  const [loadingSendGreetingAccepted, setLoadingSendGreetingAccepted] = useState(false);
+  const [SettingsTransfTicket, setSettingsTransfTicket] = useState("disabled");
+  const [loadingSettingsTransfTicket, setLoadingSettingsTransfTicket] = useState(false);
+  
+  
   useEffect(() => {
     if (Array.isArray(settings) && settings.length) {
       const userRating = settings.find((s) => s.key === "userRating");
@@ -132,7 +138,22 @@ export default function Options(props) {
       if (chatbotType) {
         setChatbotType(chatbotType.value);
       }
-
+     
+	 {/*PLW DESIGN SAUDAÇÃO*/}
+      const SendGreetingAccepted = settings.find((s) => s.key === "sendGreetingAccepted");
+      if (SendGreetingAccepted) {
+        setSendGreetingAccepted(SendGreetingAccepted.value);
+      }	 
+	  {/*PLW DESIGN SAUDAÇÃO*/}
+	  
+	  {/*TRANSFERIR TICKET*/}	
+	  const SettingsTransfTicket = settings.find((s) => s.key === "sendMsgTransfTicket");
+      if (SettingsTransfTicket) {
+        setSettingsTransfTicket(SettingsTransfTicket.value);
+      }
+	  {/*TRANSFERIR TICKET*/}
+	  
+	  
       const ipixcType = settings.find((s) => s.key === "ipixc");
       if (ipixcType) {
         setIpIxcType(ipixcType.value);
@@ -247,6 +268,32 @@ export default function Options(props) {
     setLoadingIpIxcType(false);
   }
 
+ {/*MENSAGEM DE SAUDAÇÃO PLW DESIGN*/}  
+  async function handleSendGreetingAccepted(value) {
+    setSendGreetingAccepted(value);
+    setLoadingSendGreetingAccepted(true);
+    await update({
+      key: "sendGreetingAccepted",
+      value,
+    });
+	toast.success("Operação atualizada com sucesso.");
+    setLoadingSendGreetingAccepted(false);
+  }  
+  {/*MENSAGEM DE SAUDAÇÃO PLW DESIGN*/} 
+  
+  
+  async function handleSettingsTransfTicket(value) {
+    setSettingsTransfTicket(value);
+    setLoadingSettingsTransfTicket(true);
+    await update({
+      key: "sendMsgTransfTicket",
+      value,
+    });
+	toast.success("Operação atualizada com sucesso.");
+    setLoadingSettingsTransfTicket(false);
+  }
+  
+  
   async function handleChangeTokenIxc(value) {
     setTokenIxcType(value);
     setLoadingTokenIxcType(true);
@@ -307,6 +354,17 @@ export default function Options(props) {
         {/* <Grid xs={12} item>
                     <Title>Configurações Gerais</Title>
                 </Grid> */}
+		
+		<Tabs
+          indicatorColor="primary"
+          textColor="primary"
+          scrollButtons="on"
+          variant="scrollable"
+          className={classes.tab}
+        >
+          <Tab label="Configurações Gerais" />
+
+        </Tabs>
         <Grid xs={12} sm={6} md={4} item>
           <FormControl className={classes.selectContainer}>
             <InputLabel id="ratings-label">Avaliações</InputLabel>
@@ -407,6 +465,47 @@ export default function Options(props) {
             </FormHelperText>
           </FormControl>
         </Grid>
+			{/* ENVIAR SAUDAÇÃO AO ACEITAR O TICKET */}
+        <Grid xs={12} sm={6} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <InputLabel id="sendGreetingAccepted-label">Enviar saudação ao aceitar o ticket</InputLabel>
+            <Select
+              labelId="sendGreetingAccepted-label"
+              value={SendGreetingAccepted}
+              onChange={async (e) => {
+                handleSendGreetingAccepted(e.target.value);
+              }}
+            >
+              <MenuItem value={"disabled"}>Desabilitado</MenuItem>
+              <MenuItem value={"enabled"}>Habilitado</MenuItem>
+            </Select>
+            <FormHelperText>
+              {loadingSendGreetingAccepted && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+		{/* ENVIAR SAUDAÇÃO AO ACEITAR O TICKET */}
+		
+		{/* ENVIAR MENSAGEM DE TRANSFERENCIA DE SETOR/ATENDENTE */}
+        <Grid xs={12} sm={6} md={4} item>
+          <FormControl className={classes.selectContainer}>
+            <InputLabel id="sendMsgTransfTicket-label">Enviar mensagem de transferencia de Fila/agente</InputLabel>
+            <Select
+              labelId="sendMsgTransfTicket-label"
+              value={SettingsTransfTicket}
+              onChange={async (e) => {
+                handleSettingsTransfTicket(e.target.value);
+              }}
+            >
+              <MenuItem value={"disabled"}>Desabilitado</MenuItem>
+              <MenuItem value={"enabled"}>Habilitado</MenuItem>
+            </Select>
+            <FormHelperText>
+              {loadingSettingsTransfTicket && "Atualizando..."}
+            </FormHelperText>
+          </FormControl>
+        </Grid>
+		
       </Grid>
       <Grid spacing={3} container>
         <Tabs
@@ -428,7 +527,7 @@ export default function Options(props) {
 
       </Grid>
       {/*-----------------IXC-----------------*/}
-      <Grid spacing={3} container
+		  {/*<Grid spacing={3} container
         style={{ marginBottom: 10 }}>
         <Tabs
           indicatorColor="primary"
@@ -480,9 +579,9 @@ export default function Options(props) {
             </FormHelperText>
           </FormControl>
         </Grid>
-      </Grid>
+		  </Grid>*/}
       {/*-----------------MK-AUTH-----------------*/}
-      <Grid spacing={3} container
+		  {/*<Grid spacing={3} container
         style={{ marginBottom: 10 }}>
         <Tabs
           indicatorColor="primary"
@@ -551,7 +650,7 @@ export default function Options(props) {
             </FormHelperText>
           </FormControl>
         </Grid>
-      </Grid>
+		  </Grid>*/}
       {/*-----------------ASAAS-----------------*/}
       <Grid spacing={3} container
         style={{ marginBottom: 10 }}>

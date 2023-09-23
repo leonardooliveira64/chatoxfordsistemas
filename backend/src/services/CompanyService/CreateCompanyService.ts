@@ -191,7 +191,32 @@ const CreateCompanyService = async (
       value: "disabled"
     },
   });
-
+// Enviar mensagem ao aceitar ticket
+    await Setting.findOrCreate({
+	where:{
+      companyId: company.id,
+      key: "sendGreetingAccepted",
+    },
+    defaults: {
+      companyId: company.id,
+      key: "sendGreetingAccepted",
+      value: "disabled"
+    },
+  });
+  
+  // Enviar mensagem de transferencia
+    await Setting.findOrCreate({
+	where:{
+      companyId: company.id,
+      key: "sendMsgTransfTicket",
+    },
+    defaults: {
+      companyId: company.id,
+      key: "sendMsgTransfTicket",
+      value: "disabled"
+    },
+ });
+ 
   //userRating
   await Setting.findOrCreate({
     where: {

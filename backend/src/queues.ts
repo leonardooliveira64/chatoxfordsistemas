@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/node";
+﻿import * as Sentry from "@sentry/node";
 import Queue from "bull";
 import { MessageData, SendMessage } from "./helpers/SendMessage";
 import Whatsapp from "./models/Whatsapp";
@@ -702,29 +702,29 @@ export async function startQueueProcess() {
 
 
   scheduleMonitor.add(
-    "Verify",
-    {},
-    {
-      repeat: { cron: "*/5 * * * * *" },
-      removeOnComplete: true
-    }
-  );
+  "Verify",
+  {},
+  {
+    repeat: { cron: "*/5 * * * * *", key: "verify" },
+    removeOnComplete: true
+  }
+);
 
-  campaignQueue.add(
-    "VerifyCampaigns",
-    {},
-    {
-      repeat: { cron: "*/20 * * * * *" },
-      removeOnComplete: true
-    }
-  );
+campaignQueue.add(
+  "VerifyCampaignsDatabase",
+  {},
+  {
+    repeat: { cron: "*/20 * * * * *", key: "verify-campaigns" },
+    removeOnComplete: true
+  }
+);
 
-  userMonitor.add(
-    "VerifyLoginStatus",
-    {},
-    {
-      repeat: { cron: "* * * * *" },
-      removeOnComplete: true
-    }
-  );
+userMonitor.add(
+  "VerifyLoginStatus",
+  {},
+  {
+    repeat: { cron: "* * * * *", key: "verify-login" },
+    removeOnComplete: true
+  }
+);
 }

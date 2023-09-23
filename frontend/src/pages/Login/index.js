@@ -32,6 +32,7 @@ import logo from "../../assets/zapsimples.png";
 
 const useStyles = makeStyles(theme => ({
 	paper: {
+		backgroundColor: theme.palette.login, //DARK MODE PLW DESIGN//
 		marginTop: theme.spacing(8),
 		display: "flex",
 		flexDirection: "column",

@@ -287,6 +287,7 @@ const Schedules = () => {
               <TableCell align="center">
                 {i18n.t("schedules.table.contact")}
               </TableCell>
+			 
               <TableCell align="center">
                 {i18n.t("schedules.table.body")}
               </TableCell>
@@ -306,6 +307,7 @@ const Schedules = () => {
               {schedules.map((schedule) => (
                 <TableRow key={schedule.id}>
                   <TableCell align="center">{schedule.contact.name}</TableCell>
+				 
                   <TableCell align="center" title={schedule.body}>
                     {truncate(schedule.body, 25)}
                   </TableCell>

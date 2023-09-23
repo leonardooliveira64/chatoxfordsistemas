@@ -42,15 +42,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     borderTop: "1px solid rgba(0, 0, 0, 0.12)",
-  },
+    backgroundColor: theme.palette.bordabox, //DARK MODE PLW DESIGN//
+	},
 
   newMessageBox: {
     background: "#eee",
     width: "100%",
     display: "flex",
     padding: "7px",
-    alignItems: "center",
-  },
+    backgroundColor: theme.palette.newmessagebox, //DARK MODE PLW DESIGN//
+	},
 
   messageInputWrapper: {
     padding: 6,
@@ -59,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     borderRadius: 20,
     flex: 1,
-  },
+    backgroundColor: theme.palette.inputdigita, //DARK MODE PLW DESIGN//
+	},
 
   messageInput: {
     paddingLeft: 10,

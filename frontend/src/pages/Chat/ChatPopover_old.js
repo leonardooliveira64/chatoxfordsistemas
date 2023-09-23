@@ -114,7 +114,7 @@ export default function ChatPopover() {
     soundAlertRef.current = play;
 
     if (!("Notification" in window)) {
-      console.log("This browser doesn't support notifications");
+      console.log("Este navegador não suporta notificações");
     } else {
       Notification.requestPermission();
     }
@@ -142,6 +142,7 @@ export default function ChatPopover() {
       if (data.action === "new-message") {
         dispatch({ type: "CHANGE_CHAT", payload: data });
         if (data.newMessage.senderId !== user.id) {
+          console.log(data);
           soundAlertRef.current();
         }
       }
@@ -221,7 +222,6 @@ export default function ChatPopover() {
         variant="contained"
         color={invisible ? "default" : "inherit"}
         onClick={handleClick}
-        style={{ color: "white" }}
       >
         <Badge color="secondary" variant="dot" invisible={invisible}>
           <ForumIcon />

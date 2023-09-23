@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+﻿import React, { useState, useRef, useEffect, useContext } from "react";
 
 import { useHistory } from "react-router-dom";
 import { format } from "date-fns";
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotificationsPopOver = () => {
+  const NotificationsPopOver = ({ volume }) => {
   const classes = useStyles();
 
   const history = useHistory();
@@ -55,7 +55,7 @@ const NotificationsPopOver = () => {
   const [, setDesktopNotifications] = useState([]);
 
   const { tickets } = useTickets({ withUnreadMessages: "true" });
-  const [play] = useSound(alertSound);
+  const [play] = useSound(alertSound, { volume, });
   const soundAlertRef = useRef();
 
   const historyRef = useRef(history);

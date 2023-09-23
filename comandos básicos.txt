@@ -7,7 +7,11 @@ ACESSAR A PASTA ONDE VAI FICAR O BACKUP
 cd /home/deploy/bkp
 
 COMANDO PARA GERAR O BACKUP
-sudo -u postgres pg_dump nomedobancodedados > banco.bkp
+sudo -u postgres pg_dump chatoxfordsistemas > /home/deploy/bkp/pgbackup.sql
+
+pg_dump chatoxfordsistemas > pgbackup.bkp
+
+pg_dump -U postgres -W -F p chatoxfordsistemas > /home/deploy/bkp/pgbackup.sql
 
 CANCELAR OS PROCESSOS ABERTOS QUE ESTÃO USANDO O BANCO DE DADOS
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE -- don't kill my own connection!  
@@ -38,7 +42,17 @@ PM2 RESTART 'NUMERO DA INSTANCIA'
 PM2 STOP
 PM2 START
 
+=====================================
+pm2 stop all
+cd backend/
+rm -r node_modules
+rm package-lock.json
+npm install
+Fix do arquivo
+pm2 start all
 
+
+==========================
 REINICIAR SERVER
 SUDO SHUTDOWN -R
 ------------------

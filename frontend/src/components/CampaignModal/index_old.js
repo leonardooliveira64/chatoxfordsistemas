@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+﻿import React, { useState, useEffect, useRef, useContext } from "react";
 
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
@@ -40,11 +40,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
-	backgroundColor: "#fff"
-  },
-  
-  tabmsg: {
-	  backgroundColor: theme.palette.campaigntab,
   },
 
   textField: {
@@ -75,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 const CampaignSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Too Short!")
-    .max(50, "Too Long!")
+    .max(500, "Too Long!")
     .required("Required"),
 });
 
@@ -252,7 +247,7 @@ const CampaignModal = ({
         placeholder={i18n.t("campaigns.dialog.form.messagePlaceholder")}
         multiline={true}
         variant="outlined"
-        helperText="Utilize variáveis como {nome}, {numero}, {email} ou defina variáveis personalziadas."
+        helperText="Utilize variáveis como {nome}, {numero}, {email} ou defina variáveis personalizadas."
         disabled={!campaignEditable && campaign.status !== "CANCELADA"}
       />
     );
@@ -480,11 +475,12 @@ const CampaignModal = ({
                       value={messageTab}
                       indicatorColor="primary"
                       textColor="primary"
-					  className={classes.tabmsg}
                       onChange={(e, v) => setMessageTab(v)}
                       variant="fullWidth"
                       centered
                       style={{
+                        background: "#f2f2f2",
+                        border: "1px solid #e6e6e6",
                         borderRadius: 2,
                       }}
                     >

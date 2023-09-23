@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll",
     flex: 1,
   },
-  tab: {
-    background: "#f2f5f3",
+tab: {
+    backgroundColor: theme.palette.options, //DARK MODE PLW DESIGN//
     borderRadius: 4,
   },
   paper: {

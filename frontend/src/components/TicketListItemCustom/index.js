@@ -184,7 +184,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TicketListItemCustom = ({ ticket }) => {
+  const TicketListItemCustom = ({handleChangeTab, ticket }) => {
   const classes = useStyles();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -220,6 +220,7 @@ const TicketListItemCustom = ({ ticket }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+ {/*CÓDIGO NOVO SAUDAÇÃO*/}
   const handleCloseTicket = async (id) => {
     setTag(ticket?.tags);
     setLoading(true);
@@ -257,22 +258,55 @@ const TicketListItemCustom = ({ ticket }) => {
     history.push(`/tickets/`);
   };
 
-  const handleAcepptTicket = async (id) => {
-    setLoading(true);
-    try {
-      await api.put(`/tickets/${id}`, {
-        status: "open",
-        userId: user?.id,
-      });
-    } catch (err) {
-      setLoading(false);
-      toastError(err);
-    }
-    if (isMounted.current) {
-      setLoading(false);
-    }
-    history.push(`/tickets/${ticket.uuid}`);
-  };
+    const handleAcepptTicket = async (id) => {
+        setLoading(true);
+        try {
+            await api.put(`/tickets/${id}`, {
+                status: "open",
+                userId: user?.id,
+            });
+
+            let settingIndex;
+
+            try {
+                const { data } = await api.get("/settings/");
+                settingIndex = data.filter((s) => s.key === "sendGreetingAccepted");
+            } catch (err) {
+                toastError(err);
+            }
+
+            if (settingIndex[0].value === "enabled" && !ticket.isGroup) {
+                handleSendMessage(ticket.id);
+            }
+
+        } catch (err) {
+            setLoading(false);
+            toastError(err);
+        }
+        if (isMounted.current) {
+            setLoading(false);
+        }
+
+        // handleChangeTab(null, "tickets");
+        handleChangeTab(null, "open");
+        history.push(`/tickets/${ticket.uuid}`);
+    };
+	
+	    const handleSendMessage = async (id) => {
+        const msg = `{{ms}} *{{name}}*, meu nome é *${user?.name}* e agora vou prosseguir com seu atendimento!`;
+        const message = {
+            read: 1,
+            fromMe: true,
+            mediaUrl: "",
+            body: `*Mensagem Automática:*\n${msg.trim()}`,
+        };
+        try {
+            await api.post(`/messages/${id}`, message);
+        } catch (err) {
+            toastError(err);
+        }
+    };
+	{/*CÓDIGO NOVO SAUDAÇÃO*/}
 
   const handleSelectTicket = (ticket) => {
     const code = uuidv4();
@@ -461,7 +495,7 @@ const TicketListItemCustom = ({ ticket }) => {
               className={classes.acceptButton}
               size="small"
               loading={loading}
-              onClick={e => handleAcepptTicket(ticket.id)}
+              onClick={e => handleAcepptTicket(ticket.id, handleChangeTab)}
             >
               {i18n.t("ticketsList.buttons.accept")}
             </ButtonWithSpinner>

@@ -27,7 +27,7 @@ import ModalImageCors from "../ModalImageCors";
 import MessageOptionsMenu from "../MessageOptionsMenu";
 import whatsBackground from "../../assets/wa-background.png";
 import LocationPreview from "../LocationPreview";
-
+import whatsBackgroundDark from "../../assets/wa-background-dark.png"; //DARK MODE PLW DESIGN//
 import api from "../../services/api";
 import toastError from "../../errors/toastError";
 import { socketConnection } from "../../services/socket";
@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
       color: "#808888",
       padding: 8,
     },
-  messagesList: {
-    backgroundImage: `url(${whatsBackground})`,
+ messagesList: {
+    backgroundImage: theme.mode === 'light' ? `url(${whatsBackground})` : `url(${whatsBackgroundDark})`, //DARK MODE PLW DESIGN//
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll",
     ...theme.scrollbarStyles,
   },
+
 
   circleLoading: {
     color: green[500],

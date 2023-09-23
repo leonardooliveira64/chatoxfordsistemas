@@ -247,6 +247,10 @@ const Tags = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
+			  <TableCell align="center">
+                {'ID'}
+              </TableCell>
+			  
               <TableCell align="center">{i18n.t("tags.table.name")}</TableCell>
               <TableCell align="center">
                 {i18n.t("tags.table.tickets")}
@@ -260,6 +264,7 @@ const Tags = () => {
             <>
               {tags.map((tag) => (
                 <TableRow key={tag.id}>
+				<TableCell align="center">{tag.id}</TableCell>
                   <TableCell align="center">
                     <Chip
                       variant="outlined"

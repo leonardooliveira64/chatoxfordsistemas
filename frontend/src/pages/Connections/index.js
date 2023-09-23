@@ -390,7 +390,7 @@ const Connections = () => {
 											<TableCell align="center">
 												{renderStatusToolTips(whatsApp)}
 											</TableCell>
-											<TableCell align="center">{whatsApp.battery}</TableCell>
+											<TableCell align="center">{whatsApp.battery}%</TableCell>
 											<Can
 												role={user.profile}
 												perform="connections-page:actionButtons"
