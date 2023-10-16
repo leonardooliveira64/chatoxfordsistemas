@@ -24,7 +24,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import logo from "../../assets/zapsimples.png";
+import logo from "../../assets/zapsimples_login.png";
 import { i18n } from "../../translate/i18n";
 
 import { openApi } from "../../services/api";

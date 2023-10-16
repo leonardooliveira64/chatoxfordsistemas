@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+﻿import React, { useState, useEffect, useReducer } from "react";
 import { toast } from "react-toastify";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,14 +13,14 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-
+import useAuth from "../../hooks/useAuth.js";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
-
+import OnlyForSuperUser from "../../components/OnlyForSuperUser";
 import MainContainer from "../../components/MainContainer";
 import MainHeader from "../../components/MainHeader";
 import Title from "../../components/Title";
-
+import { useHistory } from "react-router-dom";
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Announcements = () => {
   const classes = useStyles();
-
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -100,12 +100,34 @@ const Announcements = () => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [searchParam, setSearchParam] = useState("");
   const [announcements, dispatch] = useReducer(reducer, []);
-
+    const [currentUser, setCurrentUser] = useState({});
+	const { getCurrentUserInfo } = useAuth();
+	
+	
   useEffect(() => {
     dispatch({ type: "RESET" });
     setPageNumber(1);
   }, [searchParam]);
-
+// ------------------------------------------------
+     
+        
+		
+useEffect(() => {
+  async function fetchData() {
+	  const user = await getCurrentUserInfo();
+        setCurrentUser(user);
+    if (!user.super){
+      toast.error("Sem Permissão para Acessar!");
+      setTimeout(()=>{
+        history.push('/')
+      },1000);
+    }
+  }
+  fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // -----------------------------------------------------------
+  
   useEffect(() => {
     setLoading(true);
     const delayDebounceFn = setTimeout(() => {
@@ -131,6 +153,7 @@ const Announcements = () => {
       socket.disconnect();
     };
   }, []);
+  
 
   const fetchAnnouncements = async () => {
     try {
