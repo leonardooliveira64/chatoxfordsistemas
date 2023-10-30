@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import TicketsManager from "../../components/TicketsManager/";
 import Ticket from "../../components/Ticket/";
-
+import logofundo from "../assets/logofundo.png";
 import { i18n } from "../../translate/i18n";
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +43,17 @@ const useStyles = makeStyles(theme => ({
 		height: "100%",
 		textAlign: "center",
 	},
+	logofundo: {
+    width: "80%",
+    height: "auto",
+    maxWidth: 180,
+    [theme.breakpoints.down("sm")]: {
+      width: "auto",
+      height: "80%",
+      maxWidth: 180,
+    },
+    logofundo: theme.logofundo
+  },
 }));
 
 const Chat = () => {
@@ -63,7 +74,8 @@ const Chat = () => {
 							</>
 						) : (
 							<Paper square variant="outlined" className={classes.welcomeMsg}>
-								<span>{i18n.t("chat.noTicketMessage")}</span>
+								/*<span>{i18n.t("chat.noTicketMessage")}</span>*/
+								<img src={logofundo} className={classes.logofundo} alt="logofundo" />
 							</Paper>
 						)}
 					</Grid>

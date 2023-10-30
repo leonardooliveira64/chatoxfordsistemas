@@ -184,6 +184,10 @@ export const update = async (
 ): Promise<Response> => {
   const { ticketId } = req.params;
   const ticketData: TicketData = req.body;
+
+  //
+  //const ticketShow = await ShowTicketService(ticketId);
+  //
   const { companyId } = req.user;
 
   const { ticket } = await UpdateTicketService({
@@ -191,10 +195,13 @@ export const update = async (
     ticketId,
     companyId
   });
-
-
+  
   return res.status(200).json(ticket);
+
+
 };
+
+
 
 export const remove = async (
   req: Request,

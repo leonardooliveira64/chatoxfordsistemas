@@ -603,6 +603,7 @@ const verifyMediaMessage = async (
     lastMessage: body || media.filename,
   });
 
+  
   const newMessage = await CreateMessageService({
     messageData,
     companyId: ticket.companyId,

@@ -28,7 +28,7 @@ import AnnouncementIcon from "@material-ui/icons/Announcement";
 import ForumIcon from "@material-ui/icons/Forum";
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import PaymentIcon from "@material-ui/icons/Payment";
-
+import TableChartIcon from '@material-ui/icons/TableChart';
 import BallotIcon from '@material-ui/icons/Ballot';
 import GroupIcon from '@material-ui/icons/Group';
 import SendIcon from '@material-ui/icons/Send';
@@ -256,7 +256,11 @@ const MainListItems = (props) => {
         primary={i18n.t("mainDrawer.listItems.tickets")}
         icon={<WhatsAppIcon />}
       />
-
+      <ListItemLink
+        to="/kanban"
+        primary={i18n.t("Kanban")}
+        icon={<TableChartIcon />}
+      />
       <ListItemLink
         to="/quick-messages"
         primary={i18n.t("mainDrawer.listItems.quickMessages")}

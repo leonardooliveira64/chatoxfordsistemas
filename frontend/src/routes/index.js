@@ -31,6 +31,7 @@ import CampaignReport from "../pages/CampaignReport";
 import Annoucements from "../pages/Annoucements";
 import Chat from "../pages/Chat";
 import Subscription from "../pages/Subscription/";
+import kanban from "../pages/Kanban";	
 
 
 const Routes = () => {
@@ -81,6 +82,7 @@ const Routes = () => {
                 <Route exact path="/tags" component={Tags} isPrivate />
                 <Route exact path="/contacts" component={Contacts} isPrivate />
                 <Route exact path="/helps" component={Helps} isPrivate />
+				<Route exact path="/kanban" component={kanban} isPrivate />
                 <Route exact path="/users" component={Users} isPrivate />
                 <Route
                   exact
